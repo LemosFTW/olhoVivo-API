@@ -1,0 +1,27 @@
+COMPANIES - Done
+
+TODO:
+POSITION
+POSITION + RouteID
+POSITION + Company
+arrival + RouteID
+arrival + Stops
+Speed + Direction - (tipo do arquivo retornado : kmz)  
+ex /kmz/bc
+types of direction:
+bC - veículos saindo do bairro em direção ao centro
+cB - veículos saindo do centro em direção ao bairro
+
+
+Speed + Racer
+ex: KMZ/Corredor/BC
+
+Speed + other traffic routes
+ex: KMZ/OutrasVias/BC
+
+
+
+
+
+
+

@@ -24,11 +24,32 @@ PATHARRIVAL = "/Previsao?codigoParada={codigoParada}&codigoLinha={codigoLinha}"
 
 session = requests.Session()
 
-#TODO: implementar o uso de https
-#conn = http.client.HTTPSConnection(URL)
-#conn.request("GET", "")
 
 
+
+
+
+
+
+class Company:
+    def __init__(self, idOperationArea, a, id, name):
+        self.idOperationArea = idOperationArea
+        self.a = a
+        self.id = id
+        self.name = name
+
+    def __str__(self):
+        return (
+            "Company: "
+            + str(self.id)
+            + "\nOperation Area: "
+            + str(self.idOperationArea)
+            + "\nCode: "
+            + str(self.a)
+            + "\nName: "
+            + str(self.name)
+        )
+    
 
 
 
@@ -61,6 +82,9 @@ class Route:
             + "\nSignString2: "
             + str(self.signString2)
         )
+    
+
+    
     
 
 
@@ -212,11 +236,44 @@ def getCommand(inputText):
 
 
         case "companies":
+            getCompanies()
+            return
+
+
+
+        case "position":
+            inputText = input("Position of all buses? (y/n)\n")
+            if inputText == "y":
+                getPostion("all", None)
+
+
+
+
+            elif inputText == "n":
+                inputText = input("Search by:  (routeID/company)\n")
+                if inputText.lower() == "routeid":
+                    inputNumber = input("Witch route?\n")
+                    getPostion("routeid", inputNumber)
+
+
+
+
+                elif inputText.lower() == "company":
+                    inputRacer = input("Witch racer?\n")
+                    getPostion("company", inputRacer)
+
+
+
+
+
+                else:
+                    print("Invalid input")
+                    print()
 
             return
-        case "positon":
-            print("positon")
-            return
+        
+
+
         case "arrival":
             print("arrival")
             return
@@ -245,6 +302,44 @@ def iterateRouteJSON(json,type):
 
 
     match str(type):
+        case "companies":
+            print()
+
+
+
+            totalInfo = len(json)
+            print("Total companies: " + str(totalInfo))
+            hour = json["hr"]
+            print("Hour: " + hour)
+            print()
+            for item in json["e"]:
+                # identifier of the operation area
+                idOperationArea = item["a"]
+                for company in item["e"]:
+                    #code of operation area
+                    a = company["a"]
+                    # id of the company
+                    id = company["c"]
+                    # name of the company
+                    name = company["n"]
+
+                    print("Operation Area: " + str(idOperationArea))
+                    print("Code: " + str(a))
+                    print("ID: " + str(id))
+                    print("Name: " + str(name))
+
+                    print()
+                    company = Company(idOperationArea, a, id, name)
+
+
+                    
+
+
+
+                
+
+                
+
         case "racer":
             for item in json:
                 # identifier of the racer
@@ -313,6 +408,40 @@ def iterateRouteJSON(json,type):
 
 
 
+
+
+def getCompanies():
+    response = session.get(URL + PATHCOMPANIES)
+    jsonObject = json.loads(response.text)
+    iterateRouteJSON(jsonObject, "companies")
+
+    return
+
+
+def getPostion(type, argument):
+    match str(type).lower():
+        case "routeid":
+            response = session.get(URL + PATHPOSITIONROUTE + argument)
+            jsonObject = json.loads(response.text)
+            iterateRouteJSON(jsonObject, "position" )
+
+            return
+        case "company":
+            response = session.get(URL + PATHPOSITIONRACER + argument)
+            jsonObject = json.loads(response.text)
+            iterateRouteJSON(jsonObject, "position")
+
+            return
+        case "all":
+            response = session.get(URL + PATHPOSITION)
+            jsonObject = json.loads(response.text)
+            iterateRouteJSON(jsonObject, "position")
+
+            return
+        case _:
+            print("Invalid input")
+            print()
+            return
 
 
 
