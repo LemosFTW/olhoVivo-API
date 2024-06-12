@@ -5,3 +5,4 @@
 
 
 :left_right_arrow:	Author:Rodrigo Lemos Fernandes 
+TODO: Refactor the code
